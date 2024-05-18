@@ -37,4 +37,4 @@ def predict():
     return jsonify({"prediction": species[prediction[0]]})
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', debug = False)  # Set debug=False in a production environment
+    app.run(host = '0.0.0.0')  # Set debug=False in a production environment
