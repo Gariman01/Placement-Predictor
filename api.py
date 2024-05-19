@@ -24,14 +24,12 @@ def predict():
         degree_p = float(data['degree_p'])
         degree_t = float(data['degree_t'])
         workex = float(data['workex'])
-        etest_p = float(data['etest_p'])
-        specialisation = float(data['specialisation'])
         mba_p = float(data['mba_p'])
     except (KeyError, TypeError, ValueError):
         return jsonify({"error": "Invalid input data"}), 400
 
     # Make predictions using the loaded model
-    prediction = result = model.predict([[gender, ssc_p, ssc_b, hsc_p, hsc_b, hsc_s, degree_p, degree_t, workex, etest_p, specialisation, mba_p]])
+    prediction = model.predict([[gender, ssc_p, ssc_b, hsc_p, hsc_b, hsc_s, degree_p, degree_t, workex, mba_p]])
     # Return the prediction as JSON
     species = {0: 'Not Placed', 1: 'Placed'}
     return jsonify({"prediction": species[prediction[0]]})

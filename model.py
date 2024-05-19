@@ -1,6 +1,4 @@
-# This file is showing how model process data form raw to training,
-# for modelling there is saperate file
-# importing Required libraries
+# This script was used to make the model to predict placements
 import logging
 import pandas as pd
 from sklearn import preprocessing
@@ -23,10 +21,10 @@ logging.debug(' Model.py File execution started ')
 df = pd.read_csv("./dataset/train.csv")
 logging.debug(' Database Loaded ')
 
-df = df.drop(['sl_no','salary'], axis=1)
+df = df.drop(['sl_no','salary', 'etest_p', 'specialisation'], axis=1)
 df = df.apply(lambda x: x.fillna(0))
 col_names = df.columns
-category_col = ['ssc_b','hsc_b','hsc_s','degree_t','workex','specialisation','status']
+category_col = ['ssc_b','hsc_b','hsc_s','degree_t','workex','status']
 
 labelEncoder = preprocessing.LabelEncoder()
 
@@ -51,8 +49,6 @@ X = df[['gender',
  'degree_p',
  'degree_t',
  'workex',
- 'etest_p',
- 'specialisation',
  'mba_p']]
 y = df['status']
 
@@ -61,7 +57,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 
 # summarize class distribution
-print("Before oversampling: ",Counter(y_train))
+print("Before oversampling: ", Counter(y_train))
 
 # define oversampling strategy
 SMOTE = SMOTE()
@@ -70,7 +66,7 @@ SMOTE = SMOTE()
 X_train_SMOTE, y_train_SMOTE = SMOTE.fit_resample(X_train, y_train)
 
 # summarize class distribution
-print("After oversampling: ",Counter(y_train_SMOTE))
+print("After oversampling: ", Counter(y_train_SMOTE))
 
 # model fitting using LGBMClassifier
 clf = lgb.LGBMClassifier()
@@ -83,4 +79,4 @@ print('Accuracy: ', accuracy_score(y_test, predictions_e))
 
 # pkl export & finish log
 pickle.dump(clf, open("model.pkl", "wb"))
-logging.debug(' Execution of Model.py is finished ')
+logging.debug(' Execution of model.py is finished ')
